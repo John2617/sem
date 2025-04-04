@@ -1,0 +1,77 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+
+# Load the Iris dataset
+iris = sns.load_dataset('iris')
+
+# Display the first few rows of the dataset
+print(iris.head())
+
+# Basic Plotting: Scatter Plot
+plt.figure(figsize=(10, 6))
+sns.lmplot(data=iris, x='sepal_length', y='sepal_width', hue='species')
+plt.title('Sepal Length vs Sepal Width')
+plt.xlabel('Sepal Length (cm)')
+plt.ylabel('Sepal Width (cm)')
+plt.legend(title='Species')
+plt.grid()
+plt.show()
+
+# Customization of Plots: Line Plot (average sepal width by species)
+avg_sepal_width = iris.groupby('species')['sepal_width'].mean().reset_index()
+
+plt.figure(figsize=(10, 6))
+plt.plot(avg_sepal_width['species'], avg_sepal_width['sepal_width'], marker='o', linestyle='-', color='b')
+plt.title('Average Sepal Width by Species')
+plt.xlabel('Species')
+plt.ylabel('Average Sepal Width (cm)')
+plt.grid()
+plt.show()
+
+# Subplots: Petal Length and Width
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+
+sns.boxplot(ax=axes[0], data=iris, x='species', y='petal_length', hue='species', palette='pastel')
+axes[0].set_title('Boxplot of Petal Length by Species')
+
+sns.boxplot(ax=axes[1], data=iris, x='species', y='petal_width', hue='species', palette='pastel')
+axes[1].set_title('Boxplot of Petal Width by Species')
+
+plt.tight_layout()
+plt.show()
+
+# Bar Plot: Count of Species
+plt.figure(figsize=(8, 5))
+sns.countplot(data=iris, x='species', hue='species', palette='Set2')
+plt.title('Count of Iris Species')
+plt.xlabel('Species')
+plt.ylabel('Count')
+plt.show()
+
+# Histogram: Distribution of Sepal Length
+plt.figure(figsize=(8, 5))
+plt.hist(iris['sepal_length'], bins=20, color='skyblue', edgecolor='black')
+plt.title('Distribution of Sepal Length')
+plt.xlabel('Sepal Length (cm)')
+plt.ylabel('Frequency')
+plt.grid()
+plt.show()
+
+# Pie Chart: Species Distribution
+species_counts = iris['species'].value_counts()
+
+plt.figure(figsize=(8, 8))
+plt.pie(species_counts, labels=species_counts.index, autopct='%1.1f%%', startangle=90, colors=sns.color_palette('pastel'))
+plt.title('Distribution of Iris Species')
+plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.show()
+
+# Save a Figure
+plt.figure(figsize=(8, 5))
+sns.countplot(data=iris, x='species', hue='species', palette='Set2')
+plt.title('Count of Iris Species')
+plt.xlabel('Species')
+plt.ylabel('Count')
+plt.savefig('iris_species_count.png')
+plt.show()
